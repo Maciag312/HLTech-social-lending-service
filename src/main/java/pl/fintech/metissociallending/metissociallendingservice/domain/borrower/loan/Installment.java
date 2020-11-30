@@ -20,17 +20,16 @@ public class Installment {
     private final BigDecimal interest; // counted in value not percentage
     private BigDecimal fine;
     private BigDecimal total; // amount + interest + fine
-    private BigDecimal left; // every month how much left from loan to payback
+    private final BigDecimal left; // every month how much left from loan to payback
     private InstallmentStatus status;
 
     // changes to missed if installment isn't paid before due time
-    public InstallmentStatus checkStatus(Date now){
+    public void checkStatus(Date now){
         if(!status.equals(InstallmentStatus.PAID)) {
             if(now.getTime() > due.getTime()) {
                status = InstallmentStatus.MISSED;
             }
         }
-        return status;
     }
 
     /**
@@ -38,12 +37,10 @@ public class Installment {
      * @param now - time when we pay
      * @param fineInterest - annual fine interests count in rate ex 0.05 is 5%
      */
-    public boolean isInputAmountEqualToInstallmentAmount(Date now, double fineInterest, double amount){
+    public boolean isGivenAmountEqualToInstallmentAmount(Date now, double fineInterest, double amount){
         if(!status.equals(InstallmentStatus.PAID)) {
             countTotal(now, fineInterest);
-            if(total.setScale(2, RoundingMode.HALF_UP).doubleValue()==amount) {
-                return true;
-            }
+            return total.setScale(2, RoundingMode.HALF_UP).doubleValue() == amount;
         }
         return false;
     }
@@ -69,7 +66,7 @@ public class Installment {
 
 
     //counts value of interests with given interest and difference between now and due
-    private BigDecimal countInterestValue(Date now, double loaninterest){
+    private BigDecimal countInterestValue(Date now, double loanInterest){
         Calendar calNow = Calendar.getInstance();
         calNow.setTime(now);
         Calendar calDue = Calendar.getInstance();
@@ -79,7 +76,7 @@ public class Installment {
         // months or years have to be greater than 0 but no can be less than 0
         if(years>=0&&months>=0||years>0) {
             double timeInYears = (double) years + (months+1.0d) / 12;
-            return amount.multiply(BigDecimal.valueOf(Math.pow((1+loaninterest),timeInYears))).subtract(amount);
+            return amount.multiply(BigDecimal.valueOf(Math.pow((1+loanInterest),timeInYears))).subtract(amount);
         }
         return BigDecimal.ZERO;
     }
