@@ -10,7 +10,7 @@
   6. Basic flow of events
   7. Initial informations
 
-### 1. Brief description how API works
+### 1. Brief description of how API works
 The main purpose of this application is to allow the users to borrow or lend money to each other. The user may create an account and attach a bank card to it. Each user can function both as a borrower and a lender.
 
 #### User Features:
@@ -109,10 +109,10 @@ This diagram shows application container. Here can be found components with thei
   	1. If it fails system response with forbidden/unauthorized for other requests
 2. Borrower creates auction.
 3. Lender gives offer with annual rate for chosen auction.
-4. Borrower chose and accepts offers.
+4. Borrower chooses and accepts offers.
 5. System creates loan.
   	1. System transfers cash from lender to borrower account
-  	2. System creates installments for given with time frames and amount to pay
+  	2. System creates installments for given loan with time frames and amount to pay
   	3. System checks whether installment was paid in time
     	1. If installment wasn’t paid in time system calculate fines and marks them as missed
 6. Borrower pay next installment
